@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>KnowledgeFlood | Operational Data Partnerships</title>
+  <meta name="description" content="KnowledgeFlood connects established US and Canadian service businesses with AI research teams licensing de-identified operational data. Selected partners receive $250,000 to $750,000.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --paper: #f3f2ee;
+      --paper-2: #ebe9e3;
+      --ink: #0d0d0d;
+      --ink-soft: #5b5b57;
+      --line: rgba(13,13,13,.14);
+      --line-strong: rgba(13,13,13,.55);
+      --accent: #ff4d00;
+      --max: 1240px;
+      --mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+      --sans: "Inter Tight", system-ui, -apple-system, sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background-color: var(--paper);
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 100% 96px, 96px 100%;
+      background-position: 0 -1px, -1px 0;
+      background-attachment: fixed;
+      color: var(--ink);
+      font: 17px/1.55 var(--sans);
+      -webkit-font-smoothing: antialiased;
+    }
+    body::before { /* soften the grid */
+      content: ""; position: fixed; inset: 0; background: rgba(243,242,238,.72); pointer-events: none; z-index: -1;
+    }
+    h1, h2, h3 { font-weight: 600; letter-spacing: -.035em; line-height: 1; margin: 0; }
+    h2 { font-size: clamp(2.2rem, 5.2vw, 4.4rem); max-width: 16ch; }
+    h3 { font-size: 1.45rem; letter-spacing: -.02em; line-height: 1.15; }
+    p { margin: 0; }
+    a { color: inherit; }
+    .wrap { max-width: var(--max); margin: 0 auto; padding: 0 24px; }
+    .mono { font-family: var(--mono); font-size: .75rem; letter-spacing: .04em; text-transform: uppercase; }
+    .marker { font-family: var(--mono); font-size: .78rem; color: var(--ink-soft); letter-spacing: .02em; }
+    .soft { color: var(--ink-soft); }
+    section { padding: 120px 0; border-top: 1px solid var(--line-strong); }
+
+    /* Nav */
+    header.nav { position: sticky; top: 0; z-index: 20; background: rgba(243,242,238,.9); backdrop-filter: blur(10px); border-bottom: 1px solid var(--line-strong); }
+    header.nav .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+    .brand { font-weight: 700; font-size: 1.35rem; letter-spacing: -.05em; text-decoration: none; }
+    nav { display: flex; align-items: center; gap: 28px; }
+    nav a { font-family: var(--mono); font-size: .75rem; text-transform: uppercase; letter-spacing: .05em; text-decoration: none; color: var(--ink-soft); }
+    nav a:hover { color: var(--ink); }
+    .btn { display: inline-flex; align-items: center; gap: 10px; background: var(--ink); color: var(--paper) !important; text-decoration: none; font-family: var(--mono); font-size: .78rem; text-transform: uppercase; letter-spacing: .05em; padding: 13px 20px; border: 1px solid var(--ink); border-radius: 0; cursor: pointer; }
+    .btn:hover { background: var(--accent); border-color: var(--accent); }
+    .btn.ghost { background: transparent; color: var(--ink) !important; }
+    .btn.ghost:hover { background: var(--ink); color: var(--paper) !important; border-color: var(--ink); }
+    .btn .arr { font-family: var(--sans); }
+    @media (max-width: 820px) { nav a:not(.btn) { display: none; } }
+
+    /* Hero */
+    .hero { padding: 72px 0 0; border-top: 0; }
+    .wordmark { font-size: clamp(3rem, 12vw, 10.5rem); font-weight: 700; letter-spacing: -.075em; line-height: .82; margin-left: -.04em; }
+    .hero-sub { display: grid; grid-template-columns: 1.1fr 1fr; gap: 48px; margin-top: 44px; align-items: end; }
+    .hero-sub .tagline { font-size: clamp(1.4rem, 2.6vw, 2.1rem); letter-spacing: -.025em; line-height: 1.15; max-width: 22ch; font-weight: 500; }
+    .notes { display: grid; gap: 0; border-top: 1px solid var(--line-strong); }
+    .notes a { display: grid; grid-template-columns: 110px 1fr auto; gap: 16px; align-items: center; padding: 14px 0; border-bottom: 1px solid var(--line); text-decoration: none; }
+    .notes a:hover .t { color: var(--accent); }
+    .notes .k { font-family: var(--mono); font-size: .72rem; text-transform: uppercase; color: var(--ink-soft); }
+    .notes .t { font-weight: 500; }
+    .dot { display: inline-block; width: 7px; height: 7px; background: var(--accent); border-radius: 50%; margin-right: 8px; vertical-align: 1px; animation: blink 1.6s infinite; }
+    @keyframes blink { 50% { opacity: .25; } }
+    @media (max-width: 880px) { .hero-sub { grid-template-columns: 1fr; } }
+
+    /* Title block (drawing sheet) */
+    .sheet { margin-top: 64px; border: 1px solid var(--ink); background: var(--paper); display: grid; grid-template-columns: 1.4fr 1fr; }
+    .sheet-figure { position: relative; min-height: 360px; border-right: 1px solid var(--ink); overflow: hidden; }
+    .sheet-figure svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+    .sheet-figure .corner { position: absolute; font-family: var(--mono); font-size: .7rem; text-transform: uppercase; color: var(--ink-soft); }
+    .tb { display: grid; grid-template-columns: 1fr 1fr; }
+    .tb div { padding: 14px 16px; border-bottom: 1px solid var(--ink); }
+    .tb div:nth-child(odd) { border-right: 1px solid var(--ink); }
+    .tb div.full { grid-column: 1 / -1; border-right: 0; }
+    .tb div:last-child, .tb div:nth-last-child(2):not(.full) { border-bottom: 0; }
+    .tb .k { font-family: var(--mono); font-size: .66rem; text-transform: uppercase; color: var(--ink-soft); margin-bottom: 4px; letter-spacing: .05em; }
+    .tb .v { font-family: var(--mono); font-size: .9rem; font-weight: 500; }
+    .tb .v.big { font-family: var(--sans); font-size: 2rem; font-weight: 600; letter-spacing: -.03em; }
+    @media (max-width: 880px) { .sheet { grid-template-columns: 1fr; } .sheet-figure { border-right: 0; border-bottom: 1px solid var(--ink); min-height: 260px; } }
+
+    /* Two-col statements */
+    .statements { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; margin-top: 64px; }
+    .statements p { font-size: clamp(1.25rem, 2.2vw, 1.7rem); letter-spacing: -.02em; line-height: 1.3; margin-top: 14px; }
+    @media (max-width: 880px) { .statements { grid-template-columns: 1fr; } }
+
+    /* Columns w/ rules */
+    .cols { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 64px; border-top: 1px solid var(--ink); }
+    .cols > div { padding: 28px 28px 8px 0; }
+    .cols > div + div { padding-left: 28px; border-left: 1px solid var(--line-strong); }
+    .cols h3 { margin: 16px 0 12px; }
+    .cols p { color: var(--ink-soft); }
+    @media (max-width: 880px) { .cols { grid-template-columns: 1fr; } .cols > div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line-strong); } }
+
+    .head-row { display: flex; justify-content: space-between; align-items: end; gap: 32px; flex-wrap: wrap; }
+    .head-row .intro { max-width: 44ch; color: var(--ink-soft); font-size: 1.05rem; }
+
+    /* Bill of materials table */
+    .bom { width: 100%; border-collapse: collapse; margin-top: 64px; border: 1px solid var(--ink); background: var(--paper); }
+    .bom th, .bom td { text-align: left; padding: 16px 18px; border-bottom: 1px solid var(--line-strong); vertical-align: top; }
+    .bom th { font-family: var(--mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); font-weight: 500; background: var(--paper-2); border-bottom: 1px solid var(--ink); }
+    .bom td:first-child { font-family: var(--mono); font-size: .8rem; color: var(--ink-soft); width: 70px; }
+    .bom td:nth-child(2) { font-weight: 600; }
+    .bom td:last-child { color: var(--ink-soft); }
+    .bom tr:last-child td { border-bottom: 0; }
+    @media (max-width: 640px) { .bom td:last-child, .bom th:last-child { display: none; } }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .chips span { font-family: var(--mono); font-size: .75rem; text-transform: uppercase; letter-spacing: .03em; border: 1px solid var(--line-strong); padding: 8px 12px; background: var(--paper); }
+
+    /* Spec strip */
+    .spec { display: grid; grid-template-columns: repeat(3, 1fr); border: 1px solid var(--ink); margin-top: 48px; background: var(--paper); }
+    .spec > div { padding: 28px; }
+    .spec > div + div { border-left: 1px solid var(--ink); }
+    .spec .v { font-size: clamp(2.6rem, 5vw, 4rem); font-weight: 600; letter-spacing: -.05em; line-height: 1; margin-top: 18px; }
+    @media (max-width: 760px) { .spec { grid-template-columns: 1fr; } .spec > div + div { border-left: 0; border-top: 1px solid var(--ink); } }
+
+    /* Security list */
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; margin-top: 64px; }
+    @media (max-width: 880px) { .split { grid-template-columns: 1fr; } }
+    .quote { font-size: clamp(1.3rem, 2.3vw, 1.75rem); letter-spacing: -.02em; line-height: 1.3; border-left: 2px solid var(--accent); padding-left: 22px; }
+    .ruled { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--ink); }
+    .ruled li { display: grid; grid-template-columns: 48px 1fr; padding: 15px 0; border-bottom: 1px solid var(--line-strong); }
+    .ruled li span { font-family: var(--mono); font-size: .75rem; color: var(--ink-soft); padding-top: 3px; }
+
+    /* Big CTA */
+    .cta { background: var(--ink); color: var(--paper); border-top: 0; }
+    .cta h2 { max-width: 18ch; }
+    .cta .marker, .cta .soft { color: rgba(243,242,238,.6); }
+    .cta .btn { background: var(--paper); color: var(--ink) !important; border-color: var(--paper); }
+    .cta .btn:hover { background: var(--accent); border-color: var(--accent); color: var(--paper) !important; }
+
+    /* FAQ */
+    .faq { margin-top: 64px; border-top: 1px solid var(--ink); }
+    details { border-bottom: 1px solid var(--line-strong); }
+    summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: 80px 1fr 24px; gap: 12px; align-items: baseline; padding: 24px 0; font-size: clamp(1.1rem, 2vw, 1.4rem); font-weight: 500; letter-spacing: -.02em; }
+    summary::-webkit-details-marker { display: none; }
+    summary::after { content: "+"; font-family: var(--mono); font-weight: 400; color: var(--ink-soft); }
+    details[open] summary::after { content: "\2212"; }
+    details p { padding: 0 24px 26px 92px; color: var(--ink-soft); max-width: 820px; }
+    @media (max-width: 640px) { summary { grid-template-columns: 52px 1fr 20px; } details p { padding-left: 64px; } }
+
+    /* Form */
+    .form-wrap { display: grid; grid-template-columns: 1fr 1.25fr; gap: 64px; margin-top: 64px; align-items: start; }
+    @media (max-width: 880px) { .form-wrap { grid-template-columns: 1fr; } }
+    form { border: 1px solid var(--ink); background: var(--paper); padding: 28px; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    @media (max-width: 560px) { .row { grid-template-columns: 1fr; } }
+    label { display: block; font-family: var(--mono); font-size: .68rem; text-transform: uppercase; letter-spacing: .05em; color: var(--ink-soft); margin-bottom: 6px; }
+    input, select, textarea { width: 100%; font: inherit; font-size: 1rem; padding: 11px 0; border: 0; border-bottom: 1px solid var(--line-strong); border-radius: 0; background: transparent; color: var(--ink); margin-bottom: 22px; -webkit-appearance: none; appearance: none; }
+    select { background-image: linear-gradient(45deg, transparent 50%, var(--ink) 50%), linear-gradient(135deg, var(--ink) 50%, transparent 50%); background-position: calc(100% - 10px) 50%, calc(100% - 5px) 50%; background-size: 5px 5px; background-repeat: no-repeat; }
+    input:focus, select:focus, textarea:focus { outline: 0; border-bottom-color: var(--accent); }
+    textarea { min-height: 80px; resize: vertical; }
+    .consent { display: flex; gap: 10px; align-items: flex-start; text-transform: none; font-family: var(--sans); font-size: .85rem; letter-spacing: 0; margin-bottom: 22px; }
+    .consent input { width: 16px; height: 16px; margin: 2px 0 0; padding: 0; border: 1px solid var(--ink); flex: none; -webkit-appearance: auto; appearance: auto; accent-color: var(--ink); }
+    .form-msg { display: none; padding: 14px 16px; margin-top: 16px; font-size: .95rem; border: 1px solid; }
+    .form-msg.ok { display: block; border-color: #1d5a32; color: #1d5a32; }
+    .form-msg.err { display: block; border-color: #a33; color: #a33; }
+
+    footer { border-top: 1px solid var(--ink); padding: 40px 0 56px; }
+    footer .top { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; align-items: baseline; }
+    footer .disclosure { color: var(--ink-soft); font-size: .85rem; max-width: 820px; margin-top: 24px; }
+  </style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="wrap">
+    <a href="#" class="brand">knowledgeflood</a>
+    <nav>
+      <a href="#program">Program</a>
+      <a href="#who">Who qualifies</a>
+      <a href="#security">Security</a>
+      <a href="#faq">FAQ</a>
+      <a href="#apply" class="btn">Check eligibility <span class="arr">&rarr;</span></a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="wordmark">knowledgeflood</div>
+      <div class="hero-sub">
+        <p class="tagline">The data partnership layer between operating businesses and AI research.</p>
+        <div class="notes">
+          <a href="#apply"><span class="k"><span class="dot"></span>Open</span><span class="t">Current program window closes September 30</span><span>&rarr;</span></a>
+          <a href="#compensation"><span class="k">Payout</span><span class="t">$250K – $750K for selected partners</span><span>&rarr;</span></a>
+          <a href="#who"><span class="k">Eligibility</span><span class="t">25+ employees, 2+ years, US or Canada</span><span>&rarr;</span></a>
+        </div>
+      </div>
+
+      <div class="sheet" aria-label="Program summary">
+        <div class="sheet-figure" aria-hidden="true">
+          <span class="corner" style="top:14px;left:16px;">Fig. 01 · Workflow capture</span>
+          <span class="corner" style="bottom:14px;right:16px;">ISO 30° · 1:4</span>
+          <svg viewBox="0 0 600 360" preserveAspectRatio="xMidYMid meet" fill="none" stroke="#0d0d0d" stroke-width="1.2">
+            <!-- isometric stack: raw data -> scrub -> dataset -->
+            <g stroke-opacity=".35" stroke-dasharray="3 4">
+              <line x1="170" y1="190" x2="300" y2="190"/><line x1="300" y1="190" x2="430" y2="190"/>
+            </g>
+            <g>
+              <path d="M110 150 l60 -30 l60 30 l-60 30 z"/><path d="M110 150 v60 l60 30 v-60"/><path d="M230 150 v60 l-60 30"/>
+              <path d="M110 170 l60 30 l60 -30" stroke-opacity=".4"/><path d="M110 190 l60 30 l60 -30" stroke-opacity=".4"/>
+            </g>
+            <g>
+              <path d="M240 150 l60 -30 l60 30 l-60 30 z" stroke="#ff4d00"/><path d="M240 150 v60 l60 30 v-60" stroke="#ff4d00"/><path d="M360 150 v60 l-60 30" stroke="#ff4d00"/>
+              <path d="M270 150 l30 -15 l30 15 l-30 15 z" stroke="#ff4d00" stroke-opacity=".6"/>
+            </g>
+            <g>
+              <path d="M370 150 l60 -30 l60 30 l-60 30 z"/><path d="M370 150 v60 l60 30 v-60"/><path d="M490 150 v60 l-60 30"/>
+              <circle cx="430" cy="150" r="10"/>
+            </g>
+            <g font-family="JetBrains Mono, monospace" font-size="10" fill="#5b5b57" stroke="none">
+              <text x="140" y="280">A · SOURCE</text><text x="268" y="280">B · SCRUB</text><text x="398" y="280">C · DATASET</text>
+            </g>
+            <g stroke-opacity=".5"><line x1="170" y1="255" x2="170" y2="266"/><line x1="300" y1="255" x2="300" y2="266"/><line x1="430" y1="255" x2="430" y2="266"/></g>
+            <g stroke-opacity=".5"><line x1="110" y1="80" x2="490" y2="80"/><line x1="110" y1="74" x2="110" y2="86"/><line x1="490" y1="74" x2="490" y2="86"/></g>
+            <text x="300" y="70" font-family="JetBrains Mono, monospace" font-size="10" fill="#5b5b57" stroke="none" text-anchor="middle">PII REMOVED · ORIGINALS DELETED</text>
+          </svg>
+        </div>
+        <div class="tb">
+          <div class="full"><div class="k">Title</div><div class="v big">$250K – $750K</div></div>
+          <div><div class="k">Program</div><div class="v">KF-001 · REV A</div></div>
+          <div><div class="k">Buyer</div><div class="v">AI research lab</div></div>
+          <div><div class="k">Min. headcount</div><div class="v">25 employees</div></div>
+          <div><div class="k">Min. operating</div><div class="v">2 years</div></div>
+          <div><div class="k">Region</div><div class="v">US · CA</div></div>
+          <div><div class="k">Window</div><div class="v">Closes Sep 30</div></div>
+          <div><div class="k">Fee to you</div><div class="v">$0</div></div>
+          <div><div class="k">Ownership</div><div class="v">Retained by you</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Mission -->
+  <section id="program" style="border-top:0; padding-top: 140px;">
+    <div class="wrap">
+      <div class="marker">( Program )</div>
+      <h2 style="margin-top:18px;">Teaching AI how real businesses work.</h2>
+      <div class="statements">
+        <div><span class="marker">( 01 )</span><p>AI labs are spending heavily to make their systems useful inside real companies, and they need real operational data to get there.</p></div>
+        <div><span class="marker">( 02 )</span><p>KnowledgeFlood connects established service businesses with those research teams, and your business keeps running exactly as it does today.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Challenge -->
+  <section>
+    <div class="wrap">
+      <h2>Enterprise AI is blocked by real-world process data.</h2>
+      <div class="cols">
+        <div><span class="marker">( Why 01 )</span><h3>Public data doesn't show the work.</h3><p>How a request is triaged, handed off, reviewed and closed lives inside companies, not on the internet.</p></div>
+        <div><span class="marker">( Why 02 )</span><h3>Process, not people.</h3><p>The focus is task sequences, handoffs and review steps. Customer and personal information is removed.</p></div>
+        <div><span class="marker">( Why 03 )</span><h3>Not a competitor.</h3><p>The goal is to train and evaluate AI on realistic enterprise settings, not to replicate your business, products or customers.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Who qualifies -->
+  <section id="who">
+    <div class="wrap">
+      <div class="head-row">
+        <h2>Built for established service businesses.</h2>
+        <p class="intro">If your team runs on documented processes, repeatable workflows and hard-won operational knowledge, your data is likely relevant.</p>
+      </div>
+      <table class="bom">
+        <thead><tr><th>Item</th><th>Industry</th><th>Typical workflows</th></tr></thead>
+        <tbody>
+          <tr><td>01</td><td>Accounting &amp; tax firms</td><td>Engagements, review, month-end close</td></tr>
+          <tr><td>02</td><td>Financial services firms</td><td>Operations, onboarding, compliance</td></tr>
+          <tr><td>03</td><td>Technology companies</td><td>Support, delivery, internal operations</td></tr>
+          <tr><td>04</td><td>BPOs &amp; recruiting firms</td><td>Sourcing, screening, fulfillment</td></tr>
+          <tr><td>05</td><td>Consulting businesses</td><td>Engagement delivery, frameworks</td></tr>
+          <tr><td>06</td><td>Professional services</td><td>Client work and project delivery</td></tr>
+          <tr><td>07</td><td>Legal &amp; compliance organizations</td><td>Matter workflows, reviews</td></tr>
+          <tr><td>08</td><td>Healthcare administration teams</td><td>Billing, scheduling, intake</td></tr>
+          <tr><td>09</td><td>Logistics &amp; operations businesses</td><td>Dispatch, fulfillment, exceptions</td></tr>
+        </tbody>
+      </table>
+
+      <div style="margin-top:56px;">
+        <span class="marker">( Examples of relevant data )</span>
+        <div class="chips">
+          <span>Internal documentation</span><span>SOPs &amp; playbooks</span><span>Knowledge bases</span>
+          <span>Process documentation</span><span>Project management workflows</span><span>Internal communications</span>
+          <span>Business process artifacts</span><span>Templates &amp; frameworks</span><span>CRM &amp; workflow metadata</span>
+          <span>Task execution histories</span>
+        </div>
+      </div>
+
+      <div class="spec">
+        <div><span class="marker">( Req. 01 ) Headcount</span><div class="v">25+</div></div>
+        <div><span class="marker">( Req. 02 ) Operating</span><div class="v">2+ yrs</div></div>
+        <div><span class="marker">( Req. 03 ) Region</span><div class="v">US / CA</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it works -->
+  <section>
+    <div class="wrap">
+      <h2>From inquiry to payment, in four steps.</h2>
+      <div class="cols" style="grid-template-columns: repeat(4, 1fr);">
+        <div><span class="marker">( Step 01 )</span><h3>Submit</h3><p>Tell us about your business in a short form. We confirm eligibility within one business day.</p></div>
+        <div><span class="marker">( Step 02 )</span><h3>Intro call</h3><p>20 minutes with an owner or executive to walk through the program and confirm fit.</p></div>
+        <div><span class="marker">( Step 03 )</span><h3>Direct intro</h3><p>We introduce you to the research team. Your counsel reviews the NDA and data agreement.</p></div>
+        <div><span class="marker">( Step 04 )</span><h3>Transfer &amp; pay</h3><p>Data is processed and scrubbed under the signed agreement, and paid per its terms.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Security -->
+  <section id="security">
+    <div class="wrap">
+      <div class="marker">( Security )</div>
+      <h2 style="margin-top:18px;">Security is the foundation of this program.</h2>
+      <div class="split">
+        <div>
+          <p class="quote">It's not our goal to replicate businesses, products, customers, or competitive advantages. The sole purpose of this initiative is to help train and evaluate AI systems on realistic enterprise settings.</p>
+          <p class="soft" style="margin-top:28px;">All data is handled under strict contractual protections. You sign nothing until your own legal and compliance advisors have reviewed the full agreement. Regulated businesses remain responsible for their own obligations, such as client confidentiality rules, IRC §7216 for tax preparers, HIPAA, and applicable privacy law, and we'll help you raise these with the buyer early.</p>
+        </div>
+        <ul class="ruled">
+          <li><span>01</span>Original datasets are retained only for processing purposes</li>
+          <li><span>02</span>Sensitive information is scrubbed before any downstream use</li>
+          <li><span>03</span>All confidential information is removed</li>
+          <li><span>04</span>Personally identifying information is anonymized within 120 days</li>
+          <li><span>05</span>Original datasets are deleted after processing</li>
+          <li><span>06</span>No data is publicly shared</li>
+          <li><span>07</span>No customer information is exposed</li>
+          <li><span>08</span>Companies retain ownership of their underlying data</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Compensation -->
+  <section id="compensation">
+    <div class="wrap">
+      <div class="head-row">
+        <h2>Selected partners receive significant compensation.</h2>
+        <p class="intro">Payments typically range from $250,000 to $750,000. The final amount is set by the buyer and written into your agreement.</p>
+      </div>
+      <table class="bom">
+        <thead><tr><th>Factor</th><th>Basis</th><th>What it means</th></tr></thead>
+        <tbody>
+          <tr><td>F-01</td><td>Dataset size &amp; volume</td><td>How much operational history you have</td></tr>
+          <tr><td>F-02</td><td>Workflow complexity</td><td>Multi-step, multi-person processes score higher</td></tr>
+          <tr><td>F-03</td><td>Uniqueness of operational knowledge</td><td>Specialized processes that aren't documented elsewhere</td></tr>
+          <tr><td>F-04</td><td>Data quality</td><td>Complete, consistent, well-structured records</td></tr>
+          <tr><td>F-05</td><td>Domain expertise represented</td><td>Depth of professional judgment captured in the work</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta">
+    <div class="wrap head-row">
+      <div>
+        <div class="marker">( Window open )</div>
+        <h2 style="margin-top:18px;">The current program closes September 30.</h2>
+      </div>
+      <a href="#apply" class="btn">See if you qualify <span class="arr">&rarr;</span></a>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq" style="border-top:0;">
+    <div class="wrap">
+      <h2>Frequently asked.</h2>
+      <div class="faq">
+        <details><summary><span class="marker">( 01 )</span>Who is buying the data?</summary><p>A research team at a major AI lab training and evaluating AI systems for enterprise work. The buyer's identity is shared on your introductory call and in the NDA, and you'll deal with them directly from that point.</p></details>
+        <details><summary><span class="marker">( 02 )</span>Are you buying my company?</summary><p>No. This is a data agreement, not an acquisition or investment. You retain ownership of your underlying data, and nothing changes about ownership, staffing, or how you serve customers.</p></details>
+        <details><summary><span class="marker">( 03 )</span>Will this be used to compete with me?</summary><p>No. The purpose is to train and evaluate AI systems on realistic enterprise settings, not to replicate your business, products, customers, or competitive advantages.</p></details>
+        <details><summary><span class="marker">( 04 )</span>How is the payment amount decided?</summary><p>The buyer sets it based on dataset size, workflow complexity, uniqueness of the operational knowledge, data quality, and the domain expertise represented. The final amount is in your agreement before anything is transferred.</p></details>
+        <details><summary><span class="marker">( 05 )</span>What does it cost my company?</summary><p>Nothing. KnowledgeFlood is compensated by the buyer for successful introductions. You never pay us a fee.</p></details>
+        <details><summary><span class="marker">( 06 )</span>What about customer consent and confidentiality?</summary><p>Many businesses, especially in accounting, legal, financial services, and healthcare, have specific obligations around client information. We strongly recommend involving your counsel early, and we'll help you raise any consent or scope requirements with the buyer before signing.</p></details>
+        <details><summary><span class="marker">( 07 )</span>Why is there a deadline?</summary><p>The buyer's current program is funded for this quarter. Companies that are introduced and move forward before September 30 are eligible under the current terms. Later programs may or may not be available.</p></details>
+        <details><summary><span class="marker">( 08 )</span>Who should fill out the form?</summary><p>A CEO, managing partner, owner, or executive who can make decisions about the company's data and agreements.</p></details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Apply -->
+  <section id="apply">
+    <div class="wrap">
+      <div class="marker">( Check eligibility )</div>
+      <h2 style="margin-top:18px;">See if your company qualifies.</h2>
+      <div class="form-wrap">
+        <ul class="ruled">
+          <li><span>01</span>About two minutes to complete</li>
+          <li><span>02</span>Reply within one business day</li>
+          <li><span>03</span>No commitment and no cost to apply</li>
+          <li><span>04</span>Your submission is kept confidential</li>
+        </ul>
+        <!-- Replace YOUR_FORM_ID with a Formspree (formspree.io) form ID, or point action at any form backend. -->
+        <form id="apply-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+          <div class="row">
+            <div><label for="name">Full name</label><input id="name" name="name" required autocomplete="name"></div>
+            <div><label for="title">Title</label><input id="title" name="title" placeholder="CEO, Managing Partner" required autocomplete="organization-title"></div>
+          </div>
+          <div class="row">
+            <div><label for="email">Work email</label><input id="email" name="email" type="email" required autocomplete="email"></div>
+            <div><label for="phone">Phone</label><input id="phone" name="phone" type="tel" autocomplete="tel"></div>
+          </div>
+          <div class="row">
+            <div><label for="company">Company name</label><input id="company" name="company" required autocomplete="organization"></div>
+            <div>
+              <label for="industry">Industry</label>
+              <select id="industry" name="industry" required>
+                <option value="">Select</option>
+                <option>Accounting &amp; tax</option>
+                <option>Financial services</option>
+                <option>Technology</option>
+                <option>BPO / Recruiting</option>
+                <option>Consulting</option>
+                <option>Professional services</option>
+                <option>Legal &amp; compliance</option>
+                <option>Healthcare administration</option>
+                <option>Logistics &amp; operations</option>
+                <option>Other</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label for="employees">Employees</label>
+              <select id="employees" name="employees" required>
+                <option value="">Select</option>
+                <option>Under 25</option><option>25–50</option><option>51–100</option><option>101–250</option><option>250+</option>
+              </select>
+            </div>
+            <div>
+              <label for="years">Years in operation</label>
+              <select id="years" name="years" required>
+                <option value="">Select</option>
+                <option>Under 2</option><option>2–5</option><option>6–10</option><option>10+</option>
+              </select>
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label for="country">Country</label>
+              <select id="country" name="country" required>
+                <option value="">Select</option>
+                <option>United States</option><option>Canada</option><option>Other</option>
+              </select>
+            </div>
+            <div><label for="state">State / Province</label><input id="state" name="state"></div>
+          </div>
+          <label for="data">What kinds of data do you have? (optional)</label>
+          <textarea id="data" name="data" placeholder="SOPs, knowledge base, project history, CRM, tools you use"></textarea>
+          <label class="consent"><input type="checkbox" name="consent" required> I agree to be contacted by KnowledgeFlood about this program. Submitting this form does not commit my company to anything.</label>
+          <button class="btn" type="submit" style="width:100%; justify-content:center;">Submit for review <span class="arr">&rarr;</span></button>
+          <div id="form-msg" class="form-msg" role="status"></div>
+        </form>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="top">
+      <span class="brand" style="font-size:1.6rem;">knowledgeflood</span>
+      <a class="mono" href="mailto:hello@knowledgeflood.example">hello@knowledgeflood.example</a>
+      <span class="mono soft">&copy; <span id="yr"></span> KnowledgeFlood</span>
+    </div>
+    <p class="disclosure">KnowledgeFlood is an independent referral partner. We are not the buyer of any data and are not affiliated with any AI company. We are compensated by the buyer for introductions that result in a signed agreement. All compensation, data handling, and security terms are set by the buyer and are binding only as written in the final agreement between your company and the buyer. Nothing on this site is legal, tax, or accounting advice.</p>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('yr').textContent = new Date().getFullYear();
+
+  const form = document.getElementById('apply-form');
+  const msg = document.getElementById('form-msg');
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    msg.className = 'form-msg';
+    const data = new FormData(form);
+    const eligible = data.get('employees') !== 'Under 25' &&
+                     data.get('years') !== 'Under 2' &&
+                     data.get('country') !== 'Other';
+    try {
+      const res = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
+      if (!res.ok) throw new Error();
+      form.reset();
+      msg.className = 'form-msg ok';
+      msg.textContent = eligible
+        ? 'Thanks. Your company appears to meet the criteria. We will be in touch within one business day.'
+        : 'Thanks. Based on your answers your company may not meet the current criteria, but we have your details and will let you know if that changes.';
+    } catch {
+      msg.className = 'form-msg err';
+      msg.textContent = 'Something went wrong sending your submission. Please email us directly at hello@knowledgeflood.example.';
+    }
+  });
+</script>
+</body>
+</html>
