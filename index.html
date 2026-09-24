@@ -431,8 +431,8 @@
           <li><span>03</span>No commitment and no cost to apply</li>
           <li><span>04</span>Your submission is kept confidential</li>
         </ul>
-        <!-- Replace YOUR_FORM_ID with a Formspree (formspree.io) form ID, or point action at any form backend. -->
-        <form id="apply-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <!-- Submissions go to a Google Sheet via the Apps Script in apps-script/Code.gs. Replace SHEET_WEB_APP_URL with its /exec URL. -->
+        <form id="apply-form" action="SHEET_WEB_APP_URL" method="POST">
           <div class="row">
             <div><label for="name">Full name</label><input id="name" name="name" required autocomplete="name"></div>
             <div><label for="title">Title</label><input id="title" name="title" placeholder="CEO, Managing Partner" required autocomplete="organization-title"></div>
@@ -520,8 +520,9 @@
                      data.get('years') !== 'Under 2' &&
                      data.get('country') !== 'Other';
     try {
-      const res = await fetch(form.action, { method: 'POST', body: data, headers: { Accept: 'application/json' } });
-      if (!res.ok) throw new Error();
+      if (!form.getAttribute('action').startsWith('https://script.google.com/')) throw new Error('form endpoint not configured');
+      // Apps Script doesn't send CORS headers, so the response is opaque; a network error still throws.
+      await fetch(form.getAttribute('action'), { method: 'POST', mode: 'no-cors', body: new URLSearchParams(data) });
       form.reset();
       msg.className = 'form-msg ok';
       msg.textContent = eligible
